@@ -166,17 +166,18 @@ static IOR_offset_t PMDK_Xfer(int access, aiori_fd_t *file, IOR_size_t * buffer,
     long long      rc;
     long long      i;
     long long      offset_size;
+    char* f = (char*)file;
 
     offset_size = offset;
 
     if(access == WRITE){
       if(hints->fsyncPerWrite){
-	      pmem_memcpy_nodrain(&file[offset_size], ptr, length);
+	      pmem_memcpy_nodrain(&f[offset_size], ptr, length);
       }else{
-        pmem_memcpy_persist(&file[offset_size], ptr, length);
+        pmem_memcpy_persist(&f[offset_size], ptr, length);
       }
     }else{
-      memcpy(ptr, &file[offset_size], length);
+      memcpy(ptr, &f[offset_size], length);
     }
 
     return(length);
